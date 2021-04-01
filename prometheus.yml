@@ -1,0 +1,36 @@
+global:
+ scrape_interval: 5s
+ external_labels:
+   monitor: 'my-monitor'
+rule_files:
+ - 'alert.rules'
+scrape_configs:
+ - job_name: 'prometheus'
+   basic_auth:
+# add the Credentials of your Prometheus authentication login
+      username: <PROMETHEUS_USERNAME>
+      password: <PROMETHEUS_PASSWORD>
+   static_configs:
+     - targets: ['localhost:9090']
+   scheme: https
+   tls_config:
+     ca_file: /tls/prometheus.crt
+scrape_configs:
+ - job_name: 'node-exporter'
+   basic_auth:
+# add the Credentials of your node-exporter authentication login
+      username: <NODE-EXPORTER_USERNAME>
+      password: <NODE-EXPORTER_PASSWORD>
+   static_configs:
+# add the container ID of your running node-exporter
+     - targets: ['<NODE-EXPORTER-CONTAINER-ID>:9090']
+   scheme: https
+   tls_config:
+     ca_file: /tls/prometheus.crt
+ - job_name: 'chainlink'
+   static_configs:
+# add the container ID of your running Node and if you use a diffrent port you can also configure it
+     - targets: ['<NODE-CONTAINER-ID>:6689']
+   scheme: https
+   tls_config:
+     ca_file: /tls/kovan.crt
