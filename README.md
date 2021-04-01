@@ -63,6 +63,7 @@ cd ~/.monitoring/.tls/.grafana && openssl req -x509 -out   ~/.monitoring/.tls/.g
     ```bash
     cd ~/.monitoring && nano prometheusweb.yml
     ```
+    [prometheusweb.yml.txt](https://github.com/Linkriver/Prom-Grafana-Monitoring/files/6243447/prometheusweb.yml.txt)
  2) create prometheus.yml
     ```bash
     cd ~/.monitoring && nano prometheus.yml
