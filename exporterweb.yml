@@ -3,7 +3,6 @@ tls_server_config:
   key_file: /tls/node-exporter.key
 basic_auth_users:
   <USERNAME>: <PW_HASH_KEY>
-
 # add your USERNAME for node-exporter Authentication
 # add your PW_HASH_KEY for node-exporter Authentication
 # your PW_HASH_KEY created by HTPASSWD looks like this: $2y$10$elXNnq1D/.QBzFmS2UNim.o05ABswfvOembkdoqdti/4w9HLafaTW
