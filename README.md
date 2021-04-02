@@ -80,6 +80,11 @@ A .htpasswd file is used for protecting the password of Prometheus credentials u
   cd ~/.monitoring && sudo docker run --name prometheus --network kovan --restart=unless-stopped -d -p 9090:9090 -v /home/<USER>/.monitoring/prometheus.yml:/etc/prometheus/prometheus.yml -v /home/<USER>/.monitoring/.tls/prometheus.key:/tls/prometheus.key -v /home/<USER>/.monitoring/.tls/prometheus.crt:/tls/prometheus.crt -v /home/<USER>/.monitoring/prometheusweb.yml:/etc/prometheus/web.yml prom/prometheus --config.file=/etc/prometheus/prometheus.yml --web.config.file=/etc/prometheus/web.yml
    ```
  You need to change the <USER> to your Username you gain access. This will point the initialisation to the created and neccassery files and directorys.
+  
+ To check if Prometheus scrapes all metrics your need to check your targets on the prometheus GUI: https://localhost:9090/targets!
+ 
+ [Prometheus targets](https://user-images.githubusercontent.com/77073086/113421727-e1bf8000-93cb-11eb-8a72-5b198456b742.JPG)
+
  ## Loki
   
  1) create loki.yml
@@ -110,7 +115,7 @@ A .htpasswd file is used for protecting the password of Prometheus credentials u
     cd ~/.monitoring && docker run -d -p 3000:3000 --name grafana --network kovan --restart unless-stopped -v /home/<USER>/.monitoring/.tls/.grafana/grafana.key:/tls/grafana.key -v /home/<USER>/.monitoring/.tls/.grafana/grafana.crt:/tls/grafana.crt -v /home/<USER>/.monitoring/grafana.ini:/etc/grafana/grafana.ini -e GF_PATHS_CONFIG=/etc/grafana/grafana.ini grafana/grafana:latest
     ```
  ## Datasource Integration
-  1) visit on your explorer https://localhost:3000
+  1) open your Grafana GUI on your explorer https://localhost:3000
   2) you will be prompt to type your set username and password
   3) ADD a new Datasource
   4) Prometheus: You need to add:  - target: https://<PROMETHEUS_CONTAINER_ID>:9090
