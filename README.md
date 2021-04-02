@@ -10,6 +10,7 @@ This git provides a step by step proccess of full chainlink monitoring & alertin
 ## Pre-information
 - For the example setup we use the created docker network: "kovan". Every container needs to be in the same network as the chainlink node to ensure the communication between all of them.
 - For creating the files we used `nano` but you can also easily create the files with `vim`
+- You need to copy the files of this github inside of your system. Just copy the sourcecode inside after you created the file by following the guide.
 ## Create Directorys
 first of all you need to create the Directorys for all necessary files.
 ```bash
@@ -66,16 +67,16 @@ cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart un
 ```
  You need to change the <USER> to your Username you gain access. This will point the initialisation to the created and necessary files and directorys.
  ## Prometheus-server
-  
- 1) create web.yml
+ 
+ ### create web.yml
  ```bash
  cd ~/.monitoring && nano prometheusweb.yml
  ```
- 2) create prometheus.yml
+ ### create prometheus.yml
     ```bash
     cd ~/.monitoring && nano prometheus.yml
     ``` 
- 3) run prometheus-server
+ ### run prometheus-server
   ```bash
   cd ~/.monitoring && sudo docker run --name prometheus --network kovan --restart=unless-stopped -d -p 9090:9090 -v /home/<USER>/.monitoring/prometheus.yml:/etc/prometheus/prometheus.yml -v /home/<USER>/.monitoring/.tls/prometheus.key:/tls/prometheus.key -v /home/<USER>/.monitoring/.tls/prometheus.crt:/tls/prometheus.crt -v /home/<USER>/.monitoring/prometheusweb.yml:/etc/prometheus/web.yml prom/prometheus --config.file=/etc/prometheus/prometheus.yml --web.config.file=/etc/prometheus/web.yml
    ```
@@ -87,30 +88,31 @@ cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart un
 
  ## Loki
   
- 1) create loki.yml
+### create loki.yml
     ```bash
     cd ~/.monitoring && nano loki.yml
     ```
- 2) run Loki
+### run Loki
      ```bash
     cd ~/.monitoring && sudo docker run -d -p 3100:3100 --name loki --network kovan --restart unless-stopped -v /home/<USER>/.monitoring/loki.yml:/mnt/config/loki.yml grafana/loki:2.2.0 -config.file=/mnt/config/loki.yml
     ```
  ## Promtail
- 1) create promtail.yml
+ 
+### create promtail.yml
     ```bash
     cd ~/.monitoring && nano promtail.yml
     ```
- 2) run promtail
+### run promtail
     ```bash
     cd ~/.monitoring && sudo docker run -d --name promtail --network kovan --restart unless-stopped -v /home/<USER>/.monitoring/promtail.yml:/mnt/config/promtail.yml -v /var/log:/var/log grafana/promtail:2.2.0 -config.file=/mnt/config/promtail.yml
     ```
  ## Grafana
  
- 1) create default.ini
+### create default.ini
     ```bash
-    cd ~/.monitoring && nano default.ini
+    cd ~/.monitoring && nano grafana.ini
     ```
- 2) run Grafana
+### run Grafana
     ```bash
     cd ~/.monitoring && docker run -d -p 3000:3000 --name grafana --network kovan --restart unless-stopped -v /home/<USER>/.monitoring/.tls/.grafana/grafana.key:/tls/grafana.key -v /home/<USER>/.monitoring/.tls/.grafana/grafana.crt:/tls/grafana.crt -v /home/<USER>/.monitoring/grafana.ini:/etc/grafana/grafana.ini -e GF_PATHS_CONFIG=/etc/grafana/grafana.ini grafana/grafana:latest
     ```
@@ -118,35 +120,45 @@ cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart un
 - open your Grafana GUI on your explorer https://localhost:3000
 - you will be prompt to type your set username and password
 - ADD a new Datasource
-#### Prometheus
+### Prometheus
 - target: https://<PROMETHEUS_CONTAINER_ID>:9090
 - enable: `Basic_Auth`, `Credentials` , `CA_Cert`, `Skip_TLS_VERIFY`
 - `SAVE & TEST`
+
 ![s5_Prometheus datasource](https://user-images.githubusercontent.com/77073086/113423338-99559180-93ce-11eb-8426-ca2afcb764d8.JPG)
-#### LOKI
+
+### LOKI
 - target: http://<LOKI_CONTAINER_ID>:3100 
 - - `SAVE & TEST`
 
- ## Grafana Dashboards
+## Grafana Dashboards
+ 
  ![s4_Import dashboard](https://user-images.githubusercontent.com/77073086/113423336-99559180-93ce-11eb-97d6-e594f672e379.JPG)
+ 
 ### Chainlink Dashboard:           
 - click on "Create" -> "Import" 
 - "Import via panel JSON"
 - paste the json of the dashboard.file in this git
+
  ![s1_Chainlink dashboard](https://user-images.githubusercontent.com/77073086/113423330-95297400-93ce-11eb-84f0-123b582e5296.png)
-###Host Dashboard:                
+ 
+### Host Dashboard:                
 - click on "Create" -> "Import"
 - "Import via grafana.com"
 - type in: 11952
 - https://grafana.com/grafana/dashboards/11952
+
   ![s2_Host dashboard](https://user-images.githubusercontent.com/77073086/113423331-96f33780-93ce-11eb-8439-3c134eeabecd.png)
+  
  ## Alerting
+ 
  ### Create a notification channel:
   - "Alerting" -> "Notification channels" -> "Add channel"
   - Name: Telegram
   - Type: Telegram
   - BOT API TOKEN: You need to create A BOT API Token https://medium.com/shibinco/create-a-telegram-bot-using-botfather-and-get-the-api-token-900ba00e0f39
   - Chat ID: get the Chat ID of your Telegram channel
+
 ### Alerting
 You can create now alerts inside of your Dashboard. You can only set alerts on "graphs" as displayed metrics. 
      
