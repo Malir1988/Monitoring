@@ -119,6 +119,19 @@ A .htpasswd file is used for protecting the password of Prometheus credentials u
   5) LOKI:                         - target: http://<LOKI_CONTAINER_ID>:3100 
   6) LOKI as Prometheus datasource: - target: http://<LOKI_CONTAINER_ID>:3100 
  ## Chainlink Dashboard
- 
+  1) Chainlink Dashboard:           - click on "Create" -> "Import"
+                                    - "Import via panel JSON"
+                                    - paste the json of the dashboard.file in this git
+  2) Host Dashboard:                - click on "Create" -> "Import"
+                                    - "Import via grafana.com"
+                                    - type in: 11952
+                                    - https://grafana.com/grafana/dashboards/11952
  ## Alerting
-  
+  1) Create a notification channel:
+  - "Alerting" -> "Notification channels" -> "Add channel"
+  - Name: Telegram
+  - Type: Telegram
+  - BOT API TOKEN: You need to create A BOT API Token https://medium.com/shibinco/create-a-telegram-bot-using-botfather-and-get-the-api-token-900ba00e0f39
+  - Chat ID: get the Chat ID of your Telegram channel
+  2) Alerting
+     You can create now alerts inside of your Dashboard. You can only set alerts on "graphs" as displayed metrics. For a list of important alerts for a running chainlink node please take a look on our security paper: https://linkriver.io/wp-content/uploads/2021/03/Chainlink_Node_Operations_Research_Paper.pdf
