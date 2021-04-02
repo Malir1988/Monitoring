@@ -80,9 +80,9 @@ cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart un
   ```bash
   cd ~/.monitoring && sudo docker run --name prometheus --network kovan --restart=unless-stopped -d -p 9090:9090 -v /home/<USER>/.monitoring/prometheus.yml:/etc/prometheus/prometheus.yml -v /home/<USER>/.monitoring/.tls/prometheus.key:/tls/prometheus.key -v /home/<USER>/.monitoring/.tls/prometheus.crt:/tls/prometheus.crt -v /home/<USER>/.monitoring/prometheusweb.yml:/etc/prometheus/web.yml prom/prometheus --config.file=/etc/prometheus/prometheus.yml --web.config.file=/etc/prometheus/web.yml
    ```
- You need to change the <USER> to your Username you gain access. This will point the initialisation to the created and neccassery files and directorys.
+ You need to change the `<USER>` to your Username you gain access. This will point the initialisation to the created and neccassery files and directorys.
   
- To check if Prometheus scrapes all metrics your need to check your targets on the prometheus GUI: https://localhost:9090/targets
+ To check if Prometheus scrapes all metrics your need to check your targets on the prometheus GUI: `https://localhost:9090/targets`
  
 ![s6_Prometheus targets](https://user-images.githubusercontent.com/77073086/113423325-935fb080-93ce-11eb-9e2d-ba3401b2ea41.JPG)
 
@@ -117,18 +117,18 @@ cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart un
     cd ~/.monitoring && docker run -d -p 3000:3000 --name grafana --network kovan --restart unless-stopped -v /home/<USER>/.monitoring/.tls/.grafana/grafana.key:/tls/grafana.key -v /home/<USER>/.monitoring/.tls/.grafana/grafana.crt:/tls/grafana.crt -v /home/<USER>/.monitoring/grafana.ini:/etc/grafana/grafana.ini -e GF_PATHS_CONFIG=/etc/grafana/grafana.ini grafana/grafana:latest
     ```
  ## Datasource Integration
-- open your Grafana GUI on your explorer https://localhost:3000
-- you will be prompt to type your set username and password
+- open your Grafana GUI on your explorer `https://localhost:3000`
+- you will be prompt to type your set `username` and `password`
 - ADD a new Datasource
 ### Prometheus
-- target: https://<PROMETHEUS_CONTAINER_ID>:9090
+- target: `https://<PROMETHEUS_CONTAINER_ID>:9090`
 - enable: `Basic_Auth`, `Credentials` , `CA_Cert`, `Skip_TLS_VERIFY`
 - `SAVE & TEST`
 
 ![s5_Prometheus datasource](https://user-images.githubusercontent.com/77073086/113423338-99559180-93ce-11eb-8426-ca2afcb764d8.JPG)
 
 ### LOKI
-- target: http://<LOKI_CONTAINER_ID>:3100 
+- target: `http://<LOKI_CONTAINER_ID>:3100` 
 - `SAVE & TEST`
 
 ## Grafana Dashboards
@@ -136,16 +136,16 @@ cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart un
  ![s4_Import dashboard](https://user-images.githubusercontent.com/77073086/113423336-99559180-93ce-11eb-97d6-e594f672e379.JPG)
  
 ### Chainlink Dashboard:           
-- click on "Create" -> "Import" 
-- "Import via panel JSON"
+- click on `Create` -> `Import` 
+- `Import via panel JSON`
 - paste the json of the dashboard.file in this git
 
  ![s1_Chainlink dashboard](https://user-images.githubusercontent.com/77073086/113423330-95297400-93ce-11eb-84f0-123b582e5296.png)
  
 ### Host Dashboard:                
-- click on "Create" -> "Import"
-- "Import via grafana.com"
-- type in: 11952
+- click on `Create` -> `Import`
+- `Import via grafana.com`
+- type in: `11952`
 - https://grafana.com/grafana/dashboards/11952
 
   ![s2_Host dashboard](https://user-images.githubusercontent.com/77073086/113423331-96f33780-93ce-11eb-8439-3c134eeabecd.png)
@@ -160,7 +160,7 @@ cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart un
   - Chat ID: get the Chat ID of your Telegram channel
 
 ### Alerting
-You can create now alerts inside of your Dashboard. You can only set alerts on "graphs" as displayed metrics. 
+You can create now alerts inside of your Dashboard. You can only set alerts on "graph-visualisations" as displayed metrics. 
      
 For a list of important alerts for a running chainlink node please take a look on our security paper: https://linkriver.io/wp-content/uploads/2021/03/Chainlink_Node_Operations_Research_Paper.pdf
 
