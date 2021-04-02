@@ -81,9 +81,9 @@ A .htpasswd file is used for protecting the password of Prometheus credentials u
    ```
  You need to change the <USER> to your Username you gain access. This will point the initialisation to the created and neccassery files and directorys.
   
- To check if Prometheus scrapes all metrics your need to check your targets on the prometheus GUI: https://localhost:9090/targets!
+ To check if Prometheus scrapes all metrics your need to check your targets on the prometheus GUI: https://localhost:9090/targets
  
- [Prometheus targets](https://user-images.githubusercontent.com/77073086/113421727-e1bf8000-93cb-11eb-8a72-5b198456b742.JPG)
+ ![Prometheus targets](https://user-images.githubusercontent.com/77073086/113421727-e1bf8000-93cb-11eb-8a72-5b198456b742.JPG)
 
  ## Loki
   
