@@ -150,4 +150,5 @@ A .htpasswd file is used for protecting the password of Prometheus credentials u
 You can create now alerts inside of your Dashboard. You can only set alerts on "graphs" as displayed metrics. 
      
 For a list of important alerts for a running chainlink node please take a look on our security paper: https://linkriver.io/wp-content/uploads/2021/03/Chainlink_Node_Operations_Research_Paper.pdf
+
 ![s3_Alert-rules](https://user-images.githubusercontent.com/77073086/113423335-98bcfb00-93ce-11eb-8c1b-f6c7ff42821e.JPG)
