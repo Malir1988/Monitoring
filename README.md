@@ -1,4 +1,3 @@
-
 # Prom-Grafana-Monitoring
 ## Indroduction
 in this github we provide a step by step proccess of full chainlink monitoring & alerting including:
@@ -83,7 +82,7 @@ A .htpasswd file is used for protecting the password of Prometheus credentials u
   
  To check if Prometheus scrapes all metrics your need to check your targets on the prometheus GUI: https://localhost:9090/targets
  
- ![Add datasource](s6_Prometheus targets.JPG)
+![s6_Prometheus targets](https://user-images.githubusercontent.com/77073086/113423325-935fb080-93ce-11eb-9e2d-ba3401b2ea41.JPG)
 
  ## Loki
   
@@ -115,28 +114,40 @@ A .htpasswd file is used for protecting the password of Prometheus credentials u
     cd ~/.monitoring && docker run -d -p 3000:3000 --name grafana --network kovan --restart unless-stopped -v /home/<USER>/.monitoring/.tls/.grafana/grafana.key:/tls/grafana.key -v /home/<USER>/.monitoring/.tls/.grafana/grafana.crt:/tls/grafana.crt -v /home/<USER>/.monitoring/grafana.ini:/etc/grafana/grafana.ini -e GF_PATHS_CONFIG=/etc/grafana/grafana.ini grafana/grafana:latest
     ```
  ## Datasource Integration
-  1) open your Grafana GUI on your explorer https://localhost:3000
-  2) you will be prompt to type your set username and password
-  3) ADD a new Datasource
-  4) Prometheus: You need to add:  - target: https://<PROMETHEUS_CONTAINER_ID>:9090
-                                   - enable: Basic Auth, Credentials, CA_Cert, Skip_TLS_VERIFY
-                                   - asdasd
-  5) LOKI:                         - target: http://<LOKI_CONTAINER_ID>:3100 
-  6) LOKI as Prometheus datasource: - target: http://<LOKI_CONTAINER_ID>:3100 
- ## Chainlink Dashboard
-  1) Chainlink Dashboard:           - click on "Create" -> "Import"
-                                    - "Import via panel JSON"
-                                    - paste the json of the dashboard.file in this git
-  2) Host Dashboard:                - click on "Create" -> "Import"
-                                    - "Import via grafana.com"
-                                    - type in: 11952
-                                    - https://grafana.com/grafana/dashboards/11952
+- open your Grafana GUI on your explorer https://localhost:3000
+- you will be prompt to type your set username and password
+- ADD a new Datasource
+#### Prometheus
+- target: https://<PROMETHEUS_CONTAINER_ID>:9090
+- enable: `Basic_Auth`, `Credentials` , `CA_Cert`, `Skip_TLS_VERIFY`
+- `SAVE & TEST`
+![s5_Prometheus datasource](https://user-images.githubusercontent.com/77073086/113423338-99559180-93ce-11eb-8426-ca2afcb764d8.JPG)
+#### LOKI
+- target: http://<LOKI_CONTAINER_ID>:3100 
+- - `SAVE & TEST`
+
+ ## Grafana Dashboards
+ ![s4_Import dashboard](https://user-images.githubusercontent.com/77073086/113423336-99559180-93ce-11eb-97d6-e594f672e379.JPG)
+### Chainlink Dashboard:           
+- click on "Create" -> "Import" 
+- "Import via panel JSON"
+- paste the json of the dashboard.file in this git
+ ![s1_Chainlink dashboard](https://user-images.githubusercontent.com/77073086/113423330-95297400-93ce-11eb-84f0-123b582e5296.png)
+###Host Dashboard:                
+- click on "Create" -> "Import"
+- "Import via grafana.com"
+- type in: 11952
+- https://grafana.com/grafana/dashboards/11952
+  ![s2_Host dashboard](https://user-images.githubusercontent.com/77073086/113423331-96f33780-93ce-11eb-8439-3c134eeabecd.png)
  ## Alerting
-  1) Create a notification channel:
+ ### Create a notification channel:
   - "Alerting" -> "Notification channels" -> "Add channel"
   - Name: Telegram
   - Type: Telegram
   - BOT API TOKEN: You need to create A BOT API Token https://medium.com/shibinco/create-a-telegram-bot-using-botfather-and-get-the-api-token-900ba00e0f39
   - Chat ID: get the Chat ID of your Telegram channel
-  2) Alerting
-     You can create now alerts inside of your Dashboard. You can only set alerts on "graphs" as displayed metrics. For a list of important alerts for a running chainlink node please take a look on our security paper: https://linkriver.io/wp-content/uploads/2021/03/Chainlink_Node_Operations_Research_Paper.pdf
+### Alerting
+You can create now alerts inside of your Dashboard. You can only set alerts on "graphs" as displayed metrics. 
+     
+For a list of important alerts for a running chainlink node please take a look on our security paper: https://linkriver.io/wp-content/uploads/2021/03/Chainlink_Node_Operations_Research_Paper.pdf
+![s3_Alert-rules](https://user-images.githubusercontent.com/77073086/113423335-98bcfb00-93ce-11eb-8c1b-f6c7ff42821e.JPG)
