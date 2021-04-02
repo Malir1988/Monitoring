@@ -21,21 +21,21 @@ mkdir ~/.monitoring/.tls/.node-exporter
 ```
 ## TLS-certificates
 The TLS certificates are created via openssl and saved on the created directorys
-1) Prometheus
+### Prometheus
 ```bash
 cd ~/.monitoring/.tls/.prometheus && openssl req -x509 -out   ~/.monitoring/.tls/.prometheus/prometheus.crt  -keyout  ~/.monitoring/.tls/.prometheus/prometheus.key -newkey rsa:2048 -nodes -sha256 -days 365 -subj '/CN=localhost' -extensions EXT -config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
 ```
-2) Node-exporter
+### Node-exporter
 ```bash
 cd ~/.monitoring/.tls/.node-exporter && openssl req -x509 -out   ~/.monitoring/.tls/.node-exporter/node-exporter.crt  -keyout  ~/.monitoring/.tls/.node-exporter/node-exporter.key -newkey rsa:2048 -nodes -sha256 -days 365 -subj '/CN=localhost' -extensions EXT -config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
 ```
-3) Grafana
+### Grafana
 ```bash
 cd ~/.monitoring/.tls/.grafana && openssl req -x509 -out   ~/.monitoring/.tls/.grafana/grafana.crt  -keyout  ~/.monitoring/.tls/.grafana/grafana.key -newkey rsa:2048 -nodes -sha256 -days 365 -subj '/CN=localhost' -extensions EXT -config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
 ```
 ## Authentication
 A .htpasswd file is used for protecting the password of Prometheus credentials using HTTP authentication and implemented using rules within a .htaccess file.
-  1) install HTPASSWD
+ ### install HTPASSWD
   ```bash
   yum install httpd-tools
   ```
@@ -43,24 +43,24 @@ A .htpasswd file is used for protecting the password of Prometheus credentials u
   ```bash
   sudo apt-get install httpd-tools
   ```
-  2) Prometheus auth
+ ### Prometheus auth
   ```bash
   htpasswd -nBC 10 "" | tr -d ':\n'
   ```
   you need to save this value for the web.yml of prometheus
   
-  3) Node-exporter auth
+### Node-exporter auth
   ```bash
   htpasswd -nBC 10 "" | tr -d ':\n'
   ```
   you need to save this value for the web.yml of node-exporter
 ## Node Exporter
-1) create web.yml
+### create web.yml
     ```bash
     cd ~/.monitoring && nano exportweb.yml
     ```
     copy there inside the exportweb.yml of the git and just change the username of the basic-auth and the HTPASWD-token
- 2) run node-exporter
+### run node-exporter
     ```bash
     cd ~/.monitoring && docker run -d -p 9100:9100 --restart unless-stopped --network kovan -v "/:/hostfs" -v /home/<USER>/.monitoring/exporterweb.yml:/hostfs/web.yml -v /home/<USER>/.monitoring/.tls/node-exporter.key:/tls/node-exporter.key -v /home/<USER>/.monitoring/.tls/node-exporter.crt:/tls/node-exporter.crt prom/node-exporter --path.rootfs=/hostfs --web.config=/hostfs/web.yml
     ```
