@@ -129,7 +129,7 @@ cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart un
 
 ### LOKI
 - target: http://<LOKI_CONTAINER_ID>:3100 
-- - `SAVE & TEST`
+- `SAVE & TEST`
 
 ## Grafana Dashboards
  
