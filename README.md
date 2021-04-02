@@ -1,16 +1,17 @@
 # Prom-Grafana-Monitoring
 ## Indroduction
-in this github we provide a step by step proccess of full chainlink monitoring & alerting including:
+This git provides a step by step proccess of full chainlink monitoring & alerting including:
 - Prometheus-server with TLS & Basic-Auth
 - Prometheus-node-exporter with TLS & Basic-Auth
 - Grafana with TLS & Basic-Auth
 - Loki & Promtail
 - Full monitoring chainlink Dashboard
-- setting Alerts to Telegram 
+- setting Alerts and send notifications to Telegram 
 ## Pre-information
-For the example setup we use the created docker network: "kovan"
+- For the example setup we use the created docker network: "kovan". Every container needs to be in the same network as the chainlink node to ensure the communication between all of them.
+- For creating the files we used `nano` but you can also easily create the files with `vim`
 ## Create Directorys
-first of all you need to create the Directorys for all neccasery files.
+first of all you need to create the Directorys for all necessary files.
 ```bash
 mkdir ~/.monitoring
 mkdir ~/.monitoring/.tls
@@ -46,24 +47,24 @@ A .htpasswd file is used for protecting the password of Prometheus credentials u
   ```bash
   htpasswd -nBC 10 "" | tr -d ':\n'
   ```
-  you need to save this value for the web.yml of prometheus
+  you need to save this value for the prometheusweb.yml
   
 ### Node-exporter auth
   ```bash
   htpasswd -nBC 10 "" | tr -d ':\n'
   ```
-  you need to save this value for the web.yml of node-exporter
+  you need to save this value for the exporterweb.yml
 ## Node Exporter
 ### create web.yml
-    ```bash
-    cd ~/.monitoring && nano exportweb.yml
-    ```
-    copy there inside the exportweb.yml of the git and just change the username of the basic-auth and the HTPASWD-token
+```bash
+cd ~/.monitoring && nano exportweb.yml
+```
+copy there inside the exportweb.yml of the git and just change the username of the basic-auth and the HTPASWD-token
 ### run node-exporter
-    ```bash
-    cd ~/.monitoring && docker run -d -p 9100:9100 --restart unless-stopped --network kovan -v "/:/hostfs" -v /home/<USER>/.monitoring/exporterweb.yml:/hostfs/web.yml -v /home/<USER>/.monitoring/.tls/node-exporter.key:/tls/node-exporter.key -v /home/<USER>/.monitoring/.tls/node-exporter.crt:/tls/node-exporter.crt prom/node-exporter --path.rootfs=/hostfs --web.config=/hostfs/web.yml
-    ```
-    You need to change the <USER> to your Username you gain access. This will point the initialisation to the created and neccassery files and directorys.
+```bash
+cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart unless-stopped --network kovan -v "/:/hostfs" -v /home/<USER>/.monitoring/exporterweb.yml:/hostfs/web.yml -v /home/<USER>/.monitoring/.tls/node-exporter.key:/tls/node-exporter.key -v /home/<USER>/.monitoring/.tls/node-exporter.crt:/tls/node-exporter.crt prom/node-exporter --path.rootfs=/hostfs --web.config=/hostfs/web.yml
+```
+ You need to change the <USER> to your Username you gain access. This will point the initialisation to the created and necessary files and directorys.
  ## Prometheus-server
   
  1) create web.yml
