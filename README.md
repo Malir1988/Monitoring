@@ -83,7 +83,7 @@ A .htpasswd file is used for protecting the password of Prometheus credentials u
   
  To check if Prometheus scrapes all metrics your need to check your targets on the prometheus GUI: https://localhost:9090/targets
  
- ![Add dashboard](s6_Prometheus targets.JPG)
+ ![Add datasource](s6_Prometheus targets.JPG)
 
  ## Loki
   
