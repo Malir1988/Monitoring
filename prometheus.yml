@@ -7,9 +7,8 @@ rule_files:
 scrape_configs:
  - job_name: 'prometheus'
    basic_auth:
-# add here your credentials of the prometheus authentication login
-      username: <PROMETHEUS_USERNAME>
-      password: <PROMETHEUS_PASSWORD>
+      username: <PROMETHEUS_USERNAME>  # add here your Username of the prometheus authentication login
+      password: <PROMETHEUS_PASSWORD>  # add here your Password of the prometheus authentication login
    static_configs:
      - targets: ['localhost:9090']
    scheme: https
@@ -18,12 +17,10 @@ scrape_configs:
 scrape_configs:
  - job_name: 'node-exporter'
    basic_auth:
-# add here your credentials of your node-exporter authentication login
-      username: <NODE-EXPORTER_USERNAME>
-      password: <NODE-EXPORTER_PASSWORD>
+      username: <NODE-EXPORTER_USERNAME>  # add here your Username of the node-exporter authentication login
+      password: <NODE-EXPORTER_PASSWORD>  # add here your Username of the node-exporter authentication login
    static_configs:
-# add the container ID of your running node-exporter
-     - targets: ['<NODE-EXPORTER-CONTAINER-ID>:9090']
+     - targets: ['<NODE-EXPORTER-CONTAINER-ID>:9090']  # add the container ID of your running node-exporter
    scheme: https
    tls_config:
 #    ca_file: /tls/prometheus.crt
@@ -32,8 +29,7 @@ scrape_configs:
      insecure_skip_verify: true
  - job_name: 'chainlink_p1'
    static_configs:
-# add the container ID of your running Node and if you use a diffrent port you can also configure it
-     - targets: ['<NODE-CONTAINER-ID>:6689']
+     - targets: ['<NODE-CONTAINER-ID>:6689']  # add the container ID of your running Node and if you use a diffrent port you can also configure it
    scheme: https
    tls_config:
      insecure_skip_verify: true
