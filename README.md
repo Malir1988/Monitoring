@@ -1,18 +1,18 @@
-# Prom-Grafana-Monitoring
+# Prometheus Grafana monitoring
 ## Indroduction
-This git provides a step by step proccess of full chainlink monitoring & alerting including:
-- Prometheus-server with TLS & Basic-Auth
-- Prometheus-node-exporter with TLS & Basic-Auth
-- Grafana with TLS & Basic-Auth
-- Loki & Promtail
-- Full monitoring chainlink Dashboard
-- setting Alerts and send notifications to Telegram 
-## Pre-information
-- For the example setup we use the created docker network: "kovan". Every container needs to be in the same network as the chainlink node to ensure the communication between all of them.
-- For creating the files we used `nano` but you can also easily create the files with `vim`
-- You need to copy the files of this github inside of your system. Just copy the sourcecode inside after you created the file by following the guide.
-## Create Directorys
-first of all you need to create the Directorys for all necessary files.
+This git is a guide for full Chainlink node monitoring and alerting including the following deployments:
+- Prometheus server with TLS & basic-auth
+- Prometheus node exporter with TLS & basic-auth
+- Grafana with TLS & basic-auth
+- Loki & Promtail 
+- Full monitoring Chainlink dashboard 
+- Alerts and Telegram notification setup
+## Comment
+- For the example deployment we used the created "Kovan" docker network. Every container needs to be in the same network like the Chainlink node to ensure the communication between them.
+- For the creation of the files we used `nano`, you can also do it with `vim`
+- You need to copy the files from this repository to your system. Just copy the source code after you've created the file by following the guide.
+## Create directories
+Create the directories for all necessary files
 ```bash
 mkdir ~/.monitoring
 mkdir ~/.monitoring/.tls
@@ -20,13 +20,13 @@ mkdir ~/.monitoring/.tls/.prometheus
 mkdir ~/.monitoring/.tls/.grafana
 mkdir ~/.monitoring/.tls/.node-exporter
 ```
-## TLS-certificates
-The TLS certificates are created via openssl and saved on the created directorys
+## TLS certificates
+The TLS certificates are created via openssl and stored in the created directories
 ### Prometheus
 ```bash
 cd ~/.monitoring/.tls/.prometheus && openssl req -x509 -out   ~/.monitoring/.tls/.prometheus/prometheus.crt  -keyout  ~/.monitoring/.tls/.prometheus/prometheus.key -newkey rsa:2048 -nodes -sha256 -days 365 -subj '/CN=localhost' -extensions EXT -config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
 ```
-### Node-exporter
+### Node exporter
 ```bash
 cd ~/.monitoring/.tls/.node-exporter && openssl req -x509 -out   ~/.monitoring/.tls/.node-exporter/node-exporter.crt  -keyout  ~/.monitoring/.tls/.node-exporter/node-exporter.key -newkey rsa:2048 -nodes -sha256 -days 365 -subj '/CN=localhost' -extensions EXT -config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
 ```
@@ -35,8 +35,8 @@ cd ~/.monitoring/.tls/.node-exporter && openssl req -x509 -out   ~/.monitoring/.
 cd ~/.monitoring/.tls/.grafana && openssl req -x509 -out   ~/.monitoring/.tls/.grafana/grafana.crt  -keyout  ~/.monitoring/.tls/.grafana/grafana.key -newkey rsa:2048 -nodes -sha256 -days 365 -subj '/CN=localhost' -extensions EXT -config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
 ```
 ## Authentication
-A .htpasswd file is used for protecting the password of Prometheus credentials using HTTP authentication and implemented using rules within a .htaccess file.
- ### install HTPASSWD
+A .htpasswd file is used for the protection of the Prometheus credentials using HTTP authentication and is implemented using rules within a .htaccess file. !!!
+ ### Install HTPASSWD
   ```bash
   yum install httpd-tools
   ```
@@ -50,69 +50,69 @@ A .htpasswd file is used for protecting the password of Prometheus credentials u
   ```
   you need to save this value for the prometheusweb.yml
   
-### Node-exporter auth
+### Node exporter auth
   ```bash
   htpasswd -nBC 10 "" | tr -d ':\n'
   ```
   you need to save this value for the exporterweb.yml
-## Node Exporter
-### create web.yml
+## Node exporter
+### Create web.yml
 ```bash
 cd ~/.monitoring && nano exportweb.yml
 ```
-copy there inside the exportweb.yml of the git and just change the username of the basic-auth and the HTPASWD-token
-### run node-exporter
+copy the code of the exportweb.yml and just change the username of the basic-auth and the HTPASWD token
+### Run node-exporter
 ```bash
 cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart unless-stopped --network kovan -v "/:/hostfs" -v /home/<USER>/.monitoring/exporterweb.yml:/hostfs/web.yml -v /home/<USER>/.monitoring/.tls/node-exporter.key:/tls/node-exporter.key -v /home/<USER>/.monitoring/.tls/node-exporter.crt:/tls/node-exporter.crt prom/node-exporter --path.rootfs=/hostfs --web.config=/hostfs/web.yml
 ```
- You need to change the <USER> to your Username you gain access. This will point the initialisation to the created and necessary files and directorys.
- ## Prometheus-server
+ You need to change the <USER> to your user name in order to gain access. This will point the initialisation to the created and required files and directories.
+ ## Prometheus server
  
- ### create web.yml
+ ### Create web.yml
  ```bash
  cd ~/.monitoring && nano prometheusweb.yml
  ```
- ### create prometheus.yml
+ ### Create prometheus.yml
     ```bash
     cd ~/.monitoring && nano prometheus.yml
     ``` 
- ### run prometheus-server
+ ### Run prometheus-server
   ```bash
   cd ~/.monitoring && sudo docker run --name prometheus --network kovan --restart=unless-stopped -d -p 9090:9090 -v /home/<USER>/.monitoring/prometheus.yml:/etc/prometheus/prometheus.yml -v /home/<USER>/.monitoring/.tls/prometheus.key:/tls/prometheus.key -v /home/<USER>/.monitoring/.tls/prometheus.crt:/tls/prometheus.crt -v /home/<USER>/.monitoring/prometheusweb.yml:/etc/prometheus/web.yml prom/prometheus --config.file=/etc/prometheus/prometheus.yml --web.config.file=/etc/prometheus/web.yml
    ```
- You need to change the `<USER>` to your Username you gain access. This will point the initialisation to the created and neccassery files and directorys.
+ You need to change the <USER> to your user name in order to gain access. This will point the initialisation to the created and required files and directories.
   
- To check if Prometheus scrapes all metrics your need to check your targets on the prometheus GUI: `https://localhost:9090/targets`
+ To check if Prometheus scrapes all metrics, you need to check your targets in the Prometheus GUI: `https://localhost:9090/targets`
  
 ![s6_Prometheus targets](https://user-images.githubusercontent.com/77073086/113423325-935fb080-93ce-11eb-9e2d-ba3401b2ea41.JPG)
 
  ## Loki
   
-### create loki.yml
+### Create loki.yml
     ```bash
     cd ~/.monitoring && nano loki.yml
     ```
-### run Loki
+### Run Loki
      ```bash
     cd ~/.monitoring && sudo docker run -d -p 3100:3100 --name loki --network kovan --restart unless-stopped -v /home/<USER>/.monitoring/loki.yml:/mnt/config/loki.yml grafana/loki:2.2.0 -config.file=/mnt/config/loki.yml
     ```
  ## Promtail
  
-### create promtail.yml
+### Create promtail.yml
     ```bash
     cd ~/.monitoring && nano promtail.yml
     ```
-### run promtail
+### Run promtail
     ```bash
     cd ~/.monitoring && sudo docker run -d --name promtail --network kovan --restart unless-stopped -v /home/<USER>/.monitoring/promtail.yml:/mnt/config/promtail.yml -v /var/log:/var/log grafana/promtail:2.2.0 -config.file=/mnt/config/promtail.yml
     ```
  ## Grafana
  
-### create default.ini
+### Create default.ini
     ```bash
     cd ~/.monitoring && nano grafana.ini
     ```
-### run Grafana
+### Run Grafana
     ```bash
     cd ~/.monitoring && docker run -d -p 3000:3000 --name grafana --network kovan --restart unless-stopped -v /home/<USER>/.monitoring/.tls/.grafana/grafana.key:/tls/grafana.key -v /home/<USER>/.monitoring/.tls/.grafana/grafana.crt:/tls/grafana.crt -v /home/<USER>/.monitoring/grafana.ini:/etc/grafana/grafana.ini -e GF_PATHS_CONFIG=/etc/grafana/grafana.ini grafana/grafana:latest
     ```
