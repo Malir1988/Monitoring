@@ -35,7 +35,7 @@ cd ~/.monitoring/.tls/.node-exporter && openssl req -x509 -out   ~/.monitoring/.
 cd ~/.monitoring/.tls/.grafana && openssl req -x509 -out   ~/.monitoring/.tls/.grafana/grafana.crt  -keyout  ~/.monitoring/.tls/.grafana/grafana.key -newkey rsa:2048 -nodes -sha256 -days 365 -subj '/CN=localhost' -extensions EXT -config <( printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
 ```
 ## Authentication
-A .htpasswd file is used for the protection of the Prometheus credentials using HTTP authentication and is implemented using rules within a .htaccess file. !!!
+A .htpasswd file is used for the protection of the Prometheus credentials using HTTP authentication and is implemented into a .htaccess file. 
  ### Install HTPASSWD
   ```bash
   yum install httpd-tools
