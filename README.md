@@ -1,4 +1,4 @@
-# Prometheus Grafana monitoring
+# Prometheus/Grafana monitoring
 ## Indroduction
 This git is a guide for full Chainlink node monitoring and alerting including the following deployments:
 - Prometheus server with TLS & basic-auth
@@ -116,36 +116,36 @@ cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart un
     ```bash
     cd ~/.monitoring && docker run -d -p 3000:3000 --name grafana --network kovan --restart unless-stopped -v /home/<USER>/.monitoring/.tls/.grafana/grafana.key:/tls/grafana.key -v /home/<USER>/.monitoring/.tls/.grafana/grafana.crt:/tls/grafana.crt -v /home/<USER>/.monitoring/grafana.ini:/etc/grafana/grafana.ini -e GF_PATHS_CONFIG=/etc/grafana/grafana.ini grafana/grafana:latest
     ```
- ## Datasource Integration
-- open your Grafana GUI on your explorer `https://localhost:3000`
-- you will be prompt to type your set `username` and `password`
-- ADD a new Datasource
+ ## Data source Integration
+- Open your Grafana GUI in your explorer `https://localhost:3000`
+- Fill in your `username` and `password`
+- Add a new data source
 ### Prometheus
-- target: `https://<PROMETHEUS_CONTAINER_ID>:9090`
-- enable: `Basic_Auth`, `Credentials` , `CA_Cert`, `Skip_TLS_VERIFY`
+- Target: `https://<PROMETHEUS_CONTAINER_ID>:9090`
+- Enable: `Basic_Auth`, `Credentials` , `CA_Cert`, `Skip_TLS_VERIFY`
 - `SAVE & TEST`
 
 ![s5_Prometheus datasource](https://user-images.githubusercontent.com/77073086/113423338-99559180-93ce-11eb-8426-ca2afcb764d8.JPG)
 
 ### LOKI
-- target: `http://<LOKI_CONTAINER_ID>:3100` 
+- Target: `http://<LOKI_CONTAINER_ID>:3100` 
 - `SAVE & TEST`
 
-## Grafana Dashboards
+## Grafana dashboards
  
  ![s4_Import dashboard](https://user-images.githubusercontent.com/77073086/113423336-99559180-93ce-11eb-97d6-e594f672e379.JPG)
  
-### Chainlink Dashboard:           
-- click on `Create` -> `Import` 
+### Chainlink dashboard:           
+- Click on `Create` -> `Import` 
 - `Import via panel JSON`
-- paste the json of the dashboard.file in this git
+- Paste the JSON code from this repo's dashboard.file 
 
  ![s1_Chainlink dashboard](https://user-images.githubusercontent.com/77073086/113423330-95297400-93ce-11eb-84f0-123b582e5296.png)
  
-### Host Dashboard:                
-- click on `Create` -> `Import`
+### Host dashboard:                
+- Click on `Create` -> `Import`
 - `Import via grafana.com`
-- type in: `11952`
+- Type in: `11952`
 - https://grafana.com/grafana/dashboards/11952
 
   ![s2_Host dashboard](https://user-images.githubusercontent.com/77073086/113423331-96f33780-93ce-11eb-8439-3c134eeabecd.png)
@@ -157,11 +157,12 @@ cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart un
   - Name: Telegram
   - Type: Telegram
   - BOT API TOKEN: You need to create A BOT API Token https://medium.com/shibinco/create-a-telegram-bot-using-botfather-and-get-the-api-token-900ba00e0f39
-  - Chat ID: get the Chat ID of your Telegram channel
+  - Chat ID: get the chat ID of your Telegram channel
 
 ### Alerting
-You can create now alerts inside of your Dashboard. You can only set alerts on "graph-visualisations" as displayed metrics. 
+You can now set alerts on your Dashboard. You can only set alerts on "graph-visualisations" as displayed metrics. 
      
-For a list of important alerts for a running chainlink node please take a look on our security paper: https://linkriver.io/wp-content/uploads/2021/03/Chainlink_Node_Operations_Research_Paper.pdf
+For a list of important alerts for a running Chainlink node you can have a look at our security research paper: 
+https://linkriver.io/wp-content/uploads/2021/03/Chainlink_Node_Operations_Research_Paper.pdf
 
 ![s3_Alert-rules](https://user-images.githubusercontent.com/77073086/113423335-98bcfb00-93ce-11eb-8c1b-f6c7ff42821e.JPG)
