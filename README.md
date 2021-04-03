@@ -160,7 +160,7 @@ cd ~/.monitoring && docker run -d -p 3000:3000 --name grafana --network kovan --
   - Chat ID: get the chat ID of your Telegram channel
 
 ### Alerting
-You can now set alerts on your Dashboard. You can only set alerts on "graph-visualisations" as displayed metrics. 
+You can now set alerts on your dashboard. You can only set alerts on "graph-visualisations" as displayed metrics. 
      
 For a list of important alerts for a running Chainlink node you can have a look at our security research paper: 
 https://linkriver.io/wp-content/uploads/2021/03/Chainlink_Node_Operations_Research_Paper.pdf
