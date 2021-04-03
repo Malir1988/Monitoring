@@ -1,4 +1,4 @@
-# Chainlink node Prometheus/Grafana monitoring
+# Chainlink Prometheus/Grafana TLS monitoring
 ## Indroduction
 This documentation is a guide for full Chainlink node monitoring and alerting including the following deployments:
 - Prometheus server with TLS & basic-auth
