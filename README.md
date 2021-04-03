@@ -140,7 +140,7 @@ cd ~/.monitoring && docker run -d -p 3000:3000 --name grafana --network kovan --
 - `Import via panel JSON`
 - Paste the JSON code from this repo's dashboard.file 
 
- ![s1_Chainlink dashboard](https://user-images.githubusercontent.com/77073086/113423330-95297400-93ce-11eb-84f0-123b582e5296.png)
+![s1_chainlink_dashboard](https://user-images.githubusercontent.com/77073086/113481513-46491080-949a-11eb-8b58-909678625ea0.JPG)
  
 ### Host dashboard:                
 - Click on `Create` -> `Import`
