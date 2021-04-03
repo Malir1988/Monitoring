@@ -1,6 +1,6 @@
-# Prometheus/Grafana monitoring
+# Chainlink node Prometheus/Grafana monitoring
 ## Indroduction
-This git is a guide for full Chainlink node monitoring and alerting including the following deployments:
+This documentation is a guide for full Chainlink node monitoring and alerting including the following deployments:
 - Prometheus server with TLS & basic-auth
 - Prometheus node exporter with TLS & basic-auth
 - Grafana with TLS & basic-auth
