@@ -51,9 +51,9 @@ A .htpasswd file is used for the protection of the Prometheus credentials using 
   you need to save this value for the prometheusweb.yml
   
 ### Node exporter auth
-  ```bash
-  htpasswd -nBC 10 "" | tr -d ':\n'
-  ```
+```bash
+htpasswd -nBC 10 "" | tr -d ':\n'
+```
   you need to save this value for the exporterweb.yml
 ## Node exporter
 ### Create web.yml
@@ -63,7 +63,7 @@ cd ~/.monitoring && nano exportweb.yml
 copy the code of the exportweb.yml and just change the username of the basic-auth and the HTPASWD token
 ### Run node-exporter
 ```bash
-cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart unless-stopped --network kovan -v "/:/hostfs" -v /home/<USER>/.monitoring/exporterweb.yml:/hostfs/web.yml -v /home/<USER>/.monitoring/.tls/node-exporter.key:/tls/node-exporter.key -v /home/<USER>/.monitoring/.tls/node-exporter.crt:/tls/node-exporter.crt prom/node-exporter --path.rootfs=/hostfs --web.config=/hostfs/web.yml
+cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart unless-stopped --network kovan --user root -v "/:/hostfs" -v /home/<USER>/.monitoring/exporterweb.yml:/hostfs/web.yml -v /home/<USER>/.monitoring/.tls/node-exporter.key:/tls/node-exporter.key -v /home/<USER>/.monitoring/.tls/node-exporter.crt:/tls/node-exporter.crt prom/node-exporter --path.rootfs=/hostfs --web.config=/hostfs/web.yml
 ```
  You need to change the <USER> to your user name in order to gain access. This will point the initialisation to the created and required files and directories.
  ## Prometheus server
@@ -73,13 +73,13 @@ cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart un
  cd ~/.monitoring && nano prometheusweb.yml
  ```
  ### Create prometheus.yml
-    ```bash
-    cd ~/.monitoring && nano prometheus.yml
-    ``` 
+ ```bash
+ cd ~/.monitoring && nano prometheus.yml
+ ``` 
  ### Run prometheus-server
-  ```bash
-  cd ~/.monitoring && sudo docker run --name prometheus --network kovan --restart=unless-stopped -d -p 9090:9090 -v /home/<USER>/.monitoring/prometheus.yml:/etc/prometheus/prometheus.yml -v /home/<USER>/.monitoring/.tls/prometheus.key:/tls/prometheus.key -v /home/<USER>/.monitoring/.tls/prometheus.crt:/tls/prometheus.crt -v /home/<USER>/.monitoring/prometheusweb.yml:/etc/prometheus/web.yml prom/prometheus --config.file=/etc/prometheus/prometheus.yml --web.config.file=/etc/prometheus/web.yml
-   ```
+ ```bash
+ cd ~/.monitoring && sudo docker run --name prometheus --network kovan --restart=unless-stopped --user root -d -p 9090:9090 -v /home/<USER>/.monitoring/prometheus.yml:/etc/prometheus/prometheus.yml -v /home/<USER>/.monitoring/.tls/prometheus.key:/tls/prometheus.key -v /home/<USER>/.monitoring/.tls/prometheus.crt:/tls/prometheus.crt -v /home/<USER>/.monitoring/prometheusweb.yml:/etc/prometheus/web.yml prom/prometheus --config.file=/etc/prometheus/prometheus.yml --web.config.file=/etc/prometheus/web.yml
+  ```
  You need to change the <USER> to your user name in order to gain access. This will point the initialisation to the created and required files and directories.
   
  To check if Prometheus scrapes all metrics, you need to check your targets in the Prometheus GUI: `https://localhost:9090/targets`
@@ -89,33 +89,33 @@ cd ~/.monitoring && docker run -d -p 9100:9100 --name node-exporter --restart un
  ## Loki
   
 ### Create loki.yml
-    ```bash
-    cd ~/.monitoring && nano loki.yml
-    ```
+```bash
+cd ~/.monitoring && nano loki.yml
+```
 ### Run Loki
-     ```bash
-    cd ~/.monitoring && sudo docker run -d -p 3100:3100 --name loki --network kovan --restart unless-stopped -v /home/<USER>/.monitoring/loki.yml:/mnt/config/loki.yml grafana/loki:2.2.0 -config.file=/mnt/config/loki.yml
-    ```
+```bash
+cd ~/.monitoring && sudo docker run -d -p 3100:3100 --name loki --network kovan --restart unless-stopped -v /home/<USER>/.monitoring/loki.yml:/mnt/config/loki.yml grafana/loki:2.2.0 -config.file=/mnt/config/loki.yml
+```
  ## Promtail
  
 ### Create promtail.yml
-    ```bash
-    cd ~/.monitoring && nano promtail.yml
-    ```
+```bash
+cd ~/.monitoring && nano promtail.yml
+```
 ### Run promtail
-    ```bash
-    cd ~/.monitoring && sudo docker run -d --name promtail --network kovan --restart unless-stopped -v /home/<USER>/.monitoring/promtail.yml:/mnt/config/promtail.yml -v /var/log:/var/log grafana/promtail:2.2.0 -config.file=/mnt/config/promtail.yml
-    ```
+```bash
+cd ~/.monitoring && sudo docker run -d --name promtail --network kovan --restart unless-stopped --user root -v /home/<USER>/.monitoring/promtail.yml:/mnt/config/promtail.yml -v /var/log:/var/log -v /var/lib/docker:/var/lib/docker grafana/promtail:2.2.0 -config.file=/mnt/config/promtail.yml
+```
  ## Grafana
  
 ### Create default.ini
-    ```bash
-    cd ~/.monitoring && nano grafana.ini
-    ```
+```bash
+cd ~/.monitoring && nano grafana.ini
+```
 ### Run Grafana
-    ```bash
-    cd ~/.monitoring && docker run -d -p 3000:3000 --name grafana --network kovan --restart unless-stopped -v /home/<USER>/.monitoring/.tls/.grafana/grafana.key:/tls/grafana.key -v /home/<USER>/.monitoring/.tls/.grafana/grafana.crt:/tls/grafana.crt -v /home/<USER>/.monitoring/grafana.ini:/etc/grafana/grafana.ini -e GF_PATHS_CONFIG=/etc/grafana/grafana.ini grafana/grafana:latest
-    ```
+```bash
+cd ~/.monitoring && docker run -d -p 3000:3000 --name grafana --network kovan --restart unless-stopped --user root -v /home/<USER>/.monitoring/.tls/.grafana/grafana.key:/tls/grafana.key -v /home/<USER>/.monitoring/.tls/.grafana/grafana.crt:/tls/grafana.crt -v /home/<USER>/.monitoring/grafana.ini:/etc/grafana/grafana.ini -e GF_PATHS_CONFIG=/etc/grafana/grafana.ini grafana/grafana:latest
+```
  ## Data source Integration
 - Open your Grafana GUI in your explorer `https://localhost:3000`
 - Fill in your `username` and `password`
